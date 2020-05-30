@@ -1,4 +1,4 @@
-package utils
+package routine
 
 var panicHandler func(interface{})
 
