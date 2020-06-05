@@ -11,7 +11,13 @@ type Node struct {
 
 //SingleLinkedList 链表
 type SingleLinkedList struct {
-	Head *Node //头节点
+	Length int   //链表长度
+	Head   *Node //头节点
+}
+
+//NewSingleLinkedList new..
+func NewSingleLinkedList() *SingleLinkedList {
+	return &SingleLinkedList{Length: 0, Head: nil}
 }
 
 //Empty 链表是否为空
@@ -19,14 +25,9 @@ func (list *SingleLinkedList) Empty() bool {
 	return list.Head == nil
 }
 
-//Length len of this list
-func (list *SingleLinkedList) Length() (length int) {
-	current := list.Head
-	for current != nil {
-		length++
-		current = current.Next
-	}
-	return
+//Len length of this list
+func (list *SingleLinkedList) Len() (length int) {
+	return list.Length
 }
 
 //Append 添加节点
@@ -41,6 +42,7 @@ func (list *SingleLinkedList) Append(data Object) {
 		}
 		current.Next = node
 	}
+	list.Length++
 }
 
 //HeadAdd 头部插入
@@ -48,13 +50,14 @@ func (list *SingleLinkedList) HeadAdd(data Object) {
 	node := &Node{Data: data}
 	node.Next = list.Head
 	list.Head = node
+	list.Length++
 }
 
 //InsertByIndex 在特定位置插入
 func (list *SingleLinkedList) InsertByIndex(index int, data Object) {
 	if index < 0 {
 		list.HeadAdd(data)
-	} else if index > list.Length() {
+	} else if index > list.Length {
 		list.Append(data)
 	} else {
 		pre := list.Head
@@ -67,6 +70,7 @@ func (list *SingleLinkedList) InsertByIndex(index int, data Object) {
 		node.Next = pre.Next
 		pre.Next = node
 	}
+	list.Length++
 }
 
 //DeleteByIndex 删除下标元素
@@ -74,8 +78,9 @@ func (list *SingleLinkedList) DeleteByIndex(index int) {
 	pre := list.Head
 	if index <= 0 {
 		list.Head.Next = pre.Next
-	} else if index >= list.Length() {
+	} else if index >= list.Length {
 		//包装自己的log包
+		return
 	} else {
 		count := 0
 		for count < index-1 {
@@ -84,25 +89,27 @@ func (list *SingleLinkedList) DeleteByIndex(index int) {
 		}
 		pre.Next = pre.Next.Next
 	}
+	list.Length--
 }
 
 //DeleteByData 根据元素删除链表节点
 func (list *SingleLinkedList) DeleteByData(data Object) {
 	if list.Empty() {
 		//日志输出
+		return
+	}
+	pre := list.Head
+	if pre.Data == data {
+		pre = pre.Next
 	} else {
-		pre := list.Head
-		if pre.Data == data {
-			pre = pre.Next
-		} else {
-			for pre.Next != nil {
-				if pre.Data == data {
-					pre.Next = pre.Next.Next
-				}
-				pre = pre.Next
+		for pre.Next != nil {
+			if pre.Data == data {
+				pre.Next = pre.Next.Next
 			}
+			pre = pre.Next
 		}
 	}
+	list.Length--
 }
 
 //Contain 是否包含固定元素
