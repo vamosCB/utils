@@ -7,20 +7,15 @@ import (
 )
 
 func Test_Empty(t *testing.T) {
-	list := &SingleLinkedList{}
+	list := NewSingleLinkedList()
 	assert.Equal(t, true, list.Empty())
 }
 
-func Test_Length(t *testing.T) {
-	list := &SingleLinkedList{
-		Head: &Node{
-			Data: 1,
-			Next: &Node{
-				Data: 2,
-			},
-		},
-	}
-	assert.Equal(t, 2, list.Length())
+func Test_Len(t *testing.T) {
+	list := NewSingleLinkedList()
+	list.Append(1)
+	list.Append(2)
+	assert.Equal(t, 2, list.Len())
 }
 
 func Test_Append(t *testing.T) {
@@ -29,6 +24,5 @@ func Test_Append(t *testing.T) {
 	list.Append(2)
 	list.Append(3)
 	list.Append(4)
-	t.Log("aaaaa")
-	assert.Equal(t, 4, list.Length())
+	assert.Equal(t, 4, list.Length)
 }
